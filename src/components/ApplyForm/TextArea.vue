@@ -1,7 +1,7 @@
 <template>
   <div id="text-area">
     <label for="area">{{ label }}</label>
-    <textarea id="area"></textarea>
+    <textarea id="area" :value="value"></textarea>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ export default {
   name: "TextArea",
   props: {
     label: String,
+    value: String,
   },
 };
 </script>

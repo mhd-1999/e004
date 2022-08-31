@@ -13,7 +13,7 @@
         type="date"
         isRequired
       ></InputItem>
-      <SelectCity></SelectCity>
+      <SelectCity :list="list"></SelectCity>
       <MultiInput placeHolder="Chọn các vị trí mà bạn muốn"></MultiInput>
       <TextArea label="Mô tả về bản thân"></TextArea>
       <DropZone label="Ảnh cá nhân"></DropZone>
@@ -26,6 +26,9 @@ import SelectCity from "./SelectCity.vue";
 import MultiInput from "./MultiInput.vue";
 import TextArea from "./TextArea.vue";
 import DropZone from "./DropZone.vue";
+import axios from "axios";
+//api for first form
+const CITY_API = "https://provinces.open-api.vn/api/";
 export default {
   name: "FirstForm",
   components: {
@@ -38,7 +41,21 @@ export default {
   data() {
     return {
       isRequired: true,
+      list: [],
     };
+  },
+  methods: {
+    async listBox() {
+      try {
+        const res = await axios.get(CITY_API);
+        this.list = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+  created() {
+    this.listBox();
   },
 };
 </script>

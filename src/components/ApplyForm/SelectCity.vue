@@ -2,37 +2,24 @@
   <div class="input-item">
     <label for="select-city">Thành phố</label>
     <select id="select-city" name="select-city">
-      <option v-for="(item, index) in listCity" :key="index" value="index">
+      <option v-for="item in list" :key="item.id" value="index">
         <span v-if="item.name.includes('Tỉnh')">
           {{ item.name.replace("Tỉnh", "") }}
         </span>
         <span v-else-if="item.name.includes('Thành phố')">
           {{ item.name.replace("Thành phố  ", "") }}</span
         >
+        <slot></slot>
       </option>
     </select>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "SelectCity",
-  data() {
-    return {
-      listCity: [],
-    };
-  },
-  created() {
-    axios
-      .get("https://provinces.open-api.vn/api/")
-      .then((res) => {
-        this.listCity = res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  props: {
+    list: Array,
   },
 };
 </script>

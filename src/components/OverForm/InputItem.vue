@@ -1,7 +1,7 @@
 <template>
   <div class="input-item">
     <label :for="name"><span v-show="isRequired">Must</span>{{ label }}</label>
-    <input :type="type" :id="name" :placeholder="placeholder" />
+    <input :type="type" :id="name" :placeholder="placeholder" :value="value" />
     <slot></slot>
   </div>
 </template>
@@ -14,6 +14,7 @@ export default {
     placeholder: String,
     type: String,
     name: String,
+    value: String,
 
     isRequired: {
       type: Boolean,
