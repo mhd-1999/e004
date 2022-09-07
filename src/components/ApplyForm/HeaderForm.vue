@@ -81,7 +81,4 @@ h3 {
   width: unset;
   border: unset;
 }
-.step .active-idx {
-  background: red;
-}
 </style>

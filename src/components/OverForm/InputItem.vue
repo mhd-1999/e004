@@ -1,8 +1,17 @@
 <template>
   <div class="input-item">
     <label :for="name"><span v-show="isRequired">Must</span>{{ label }}</label>
-    <input :type="type" :id="name" :placeholder="placeholder" :value="value" />
-    <slot></slot>
+    <div class="input-zone">
+      <input
+        :type="type"
+        :id="name"
+        :placeholder="placeholder"
+        :value="valueInput"
+        @input="onInputValue"
+        @change="handleChangeInput"
+      />
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -14,10 +23,19 @@ export default {
     placeholder: String,
     type: String,
     name: String,
-    value: String,
+    valueInput: String,
 
     isRequired: {
       type: Boolean,
+    },
+  },
+  methods: {
+    onInputValue(e) {
+      const inputText = e.target.value;
+      this.$emit("update:valueInput", inputText);
+    },
+    handleChangeInput() {
+      this.$emit("handleChangeInput");
     },
   },
 };
@@ -49,6 +67,10 @@ export default {
   outline: none;
   border: 1px solid #dcdcdc;
   border-radius: 4px;
+  width: 100%;
+}
+.input-item p {
+  display: inline-block;
 }
 .input-item input:focus {
   border: 1px solid orange;
@@ -56,5 +78,10 @@ export default {
 }
 .input-item input[type="date"] {
   width: 118px;
+  margin-right: 48px;
+}
+.input-zone {
+  position: relative;
 }
 </style>
+:placeholder="placeholder"

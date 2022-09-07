@@ -1,8 +1,24 @@
 <template>
   <div class="button-control">
     <button @click="handleBack" v-show="currentStep > 1">Quay lại</button>
-    <button @click="handleNext" v-show="currentStep < 3">Tiếp</button>
-    <button v-show="currentStep == 3">Hoàn Thành</button>
+    <button
+      @click="handleNext"
+      v-show="currentStep < 3"
+      :class="{ active: currentStep == 2 }"
+      type="submit"
+      form="first-form"
+      value="Submit"
+    >
+      Tiếp
+    </button>
+    <button
+      type="submit"
+      value="Submit"
+      v-show="currentStep == 3"
+      :class="{ active: currentStep == 3 }"
+    >
+      Hoàn Thành
+    </button>
   </div>
 </template>
 
@@ -38,6 +54,11 @@ export default {
   color: #fff;
   font-weight: 700;
   font-size: 16px;
-  gap: 10px;
+  margin-right: 26px;
+}
+
+.button-control .active {
+  background: #627d98;
+  color: white;
 }
 </style>

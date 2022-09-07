@@ -1,15 +1,20 @@
 <template>
   <div class="input-item">
-    <label for="select-city">Thành phố</label>
-    <select id="select-city" name="select-city">
-      <option v-for="item in list" :key="item.id" value="index">
+    <label for="select-city">{{ label }}</label>
+    <select
+      id="select-city"
+      name="select-city"
+      :value="selectValue"
+      @input="onSelect"
+    >
+      <option v-for="item in list" :key="item.id" :value="item.name">
         <span v-if="item.name.includes('Tỉnh')">
           {{ item.name.replace("Tỉnh", "") }}
         </span>
         <span v-else-if="item.name.includes('Thành phố')">
           {{ item.name.replace("Thành phố  ", "") }}</span
         >
-        <slot></slot>
+        <span v-else>{{ item.name }}</span>
       </option>
     </select>
   </div>
@@ -20,6 +25,18 @@ export default {
   name: "SelectCity",
   props: {
     list: Array,
+    label: String,
+    selectValue: String,
+  },
+  // data() {
+  //   return {
+  //     selected: this.selectValue,
+  //   };
+  // },
+  methods: {
+    onSelect(e) {
+      this.$emit("update:selectValue", e.target.value);
+    },
   },
 };
 </script>

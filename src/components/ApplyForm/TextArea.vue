@@ -1,7 +1,12 @@
 <template>
   <div id="text-area">
-    <label for="area">{{ label }}</label>
-    <textarea id="area" :value="value"></textarea>
+    <label><span v-show="isRequired">Must</span>{{ label }}</label>
+    <textarea
+      id="area"
+      :value="valueInput"
+      @input="onInputValue"
+      @change="handleChangeArea"
+    ></textarea>
   </div>
 </template>
 
@@ -10,7 +15,16 @@ export default {
   name: "TextArea",
   props: {
     label: String,
-    value: String,
+    valueInput: String,
+    isRequired: Boolean,
+  },
+  methods: {
+    onInputValue(e) {
+      this.$emit("update:valueInput", e.target.value);
+    },
+    handleChangeArea() {
+      this.$emit("handleChangeArea");
+    },
   },
 };
 </script>
@@ -31,5 +45,17 @@ export default {
 #text-area textarea:focus {
   outline: none;
   border: 1px solid orange;
+}
+span {
+  font-size: 12px;
+  color: #fff;
+  padding: 5px 8px;
+  background-color: #627d98;
+  line-height: 20px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+label {
+  margin-bottom: 6px;
 }
 </style>

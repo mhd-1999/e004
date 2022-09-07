@@ -3,10 +3,10 @@
     <!-- <input type="text" /> -->
     <div class="form-group" v-for="item in companyList" :key="item.id">
       <div class="select-box">
-        <select>
-          <option value="1">{{ item.compName }}</option>
-        </select>
-        <button><img :src="trashIcon" alt="" /></button>
+        <SelectCity :list="company"></SelectCity>
+        <button @click="handleDelete(item.id)">
+          <img :src="trashIcon" alt="" />
+        </button>
       </div>
       <InputItem
         label="Vị trí từng làm"
@@ -15,7 +15,7 @@
         :value="item.position"
       ></InputItem>
       <InputItem label="Thời gian làm việc" isRequired type="date"
-        ><input type="date"
+        ><input class="input-time" type="date"
       /></InputItem>
       <TextArea label="Mô tả về công việc" :value="item.des"></TextArea>
     </div>
@@ -30,6 +30,8 @@ import InputItem from "../OverForm/InputItem.vue";
 import TextArea from "./TextArea.vue";
 import trashIcon from "../../assets/Image/trash.png";
 import plusIcon from "../../assets/Image/plus.png";
+import SelectCity from "./SelectCity.vue";
+import { company } from "../../data/data";
 export default {
   name: "SecondForm",
   data() {
@@ -47,12 +49,16 @@ export default {
       expCount: 1,
       trashIcon,
       plusIcon,
+      company,
     };
   },
-  components: { InputItem, TextArea },
+  components: { InputItem, TextArea, SelectCity },
   methods: {
     handleAdd() {
       this.companyList.push({ compName: "", position: "", start: "", des: "" });
+    },
+    handleDelete(index) {
+      this.companyList.splice(index, 1);
     },
   },
 };
@@ -111,4 +117,18 @@ export default {
 .add-button img {
   padding: 0 8px;
 }
+.select-box .input-item {
+  width: 898px;
+  justify-content: center;
+  margin-left: 16px;
+  margin-bottom: 0;
+}
+.input-time:before {
+  content: "";
+  position: absolute;
+  width: 11px;
+  border: 1px solid #bdbdbd;
+  left: 135px;
+}
 </style>
+slice
