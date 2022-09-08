@@ -8,7 +8,11 @@
         :class="{ active: currentStep == index + 1 }"
         class="step-item"
       >
-        <span v-if="currentStep >= index + 1" class="step-idx step-check">
+        <span
+          v-if="currentStep >= index + 1"
+          class="step-idx step-check"
+          :class="{ active: isDisabled }"
+        >
           {{ item.id }}
         </span>
         <span v-else class="step-idx">
@@ -26,6 +30,11 @@ export default {
   props: {
     currentStep: Number,
     step: Array,
+  },
+  computed: {
+    isDisabled() {
+      return this.$store.getters.isDisable;
+    },
   },
 };
 </script>
@@ -80,5 +89,8 @@ h3 {
 .step .step-item:last-child .step-idx:before {
   width: unset;
   border: unset;
+}
+span.active {
+  background: red !important;
 }
 </style>

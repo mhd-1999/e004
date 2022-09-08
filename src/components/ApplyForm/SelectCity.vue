@@ -6,6 +6,7 @@
       name="select-city"
       :value="selectValue"
       @input="onSelect"
+      @change="onChangeSelect"
     >
       <option v-for="item in list" :key="item.id" :value="item.name">
         <span v-if="item.name.includes('Tỉnh')">
@@ -28,14 +29,12 @@ export default {
     label: String,
     selectValue: String,
   },
-  // data() {
-  //   return {
-  //     selected: this.selectValue,
-  //   };
-  // },
   methods: {
     onSelect(e) {
       this.$emit("update:selectValue", e.target.value);
+    },
+    onChangeSelect() {
+      this.$emit("onChangeSelect");
     },
   },
 };

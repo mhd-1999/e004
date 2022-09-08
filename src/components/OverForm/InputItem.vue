@@ -79,9 +79,17 @@ export default {
 .input-item input[type="date"] {
   width: 118px;
   margin-right: 48px;
+  font-size: 12px;
 }
 .input-zone {
   position: relative;
 }
+.active input[type="date"] {
+  border-color: red !important;
+  color: red;
+}
+.active input {
+  border-color: red;
+  color: red;
+}
 </style>
-:placeholder="placeholder"

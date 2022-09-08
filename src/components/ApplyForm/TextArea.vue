@@ -5,7 +5,7 @@
       id="area"
       :value="valueInput"
       @input="onInputValue"
-      @change="handleChangeArea"
+      :maxlength="maxLength"
     ></textarea>
   </div>
 </template>
@@ -17,13 +17,11 @@ export default {
     label: String,
     valueInput: String,
     isRequired: Boolean,
+    maxLength: String,
   },
   methods: {
     onInputValue(e) {
       this.$emit("update:valueInput", e.target.value);
-    },
-    handleChangeArea() {
-      this.$emit("handleChangeArea");
     },
   },
 };
@@ -57,5 +55,8 @@ span {
 }
 label {
   margin-bottom: 6px;
+}
+.active textarea {
+  border-color: red !important;
 }
 </style>

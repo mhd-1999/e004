@@ -1,27 +1,46 @@
 <template>
   <div id="second-form">
-    <!-- <input type="text" /> -->
-    <div class="form-group" v-for="item in companyList" :key="item.id">
-      <div class="select-box">
-        <SelectCity :list="company"></SelectCity>
-        <button @click="handleDelete(item.id)">
-          <img :src="trashIcon" alt="" />
-        </button>
+    <form action="" v-on:submit.prevent>
+      <div
+        class="form-group"
+        v-for="item in companyList"
+        :key="item.id"
+        :class="{ warning: checkExpCount }"
+      >
+        <div class="select-box">
+          <SelectCity
+            :list="company"
+            :selectValue.sync="item.company"
+          ></SelectCity>
+          <button @click="handleDelete(item.id)">
+            <img :src="trashIcon" alt="" />
+          </button>
+        </div>
+        <InputItem
+          label="Vị trí từng làm"
+          isRequired
+          type="text"
+          :value="item.position"
+          :valueInput.sync="item.poisition"
+        ></InputItem>
+        <InputItem
+          label="Thời gian làm việc"
+          isRequired
+          type="date"
+          :valueInput.sync="item.start_date"
+          ><input class="input-time" type="date" v-model="item.end_date"
+        /></InputItem>
+        <TextArea
+          label="Mô tả về công việc"
+          :value="item.des"
+          :valueInput.sync="item.description"
+        ></TextArea>
       </div>
-      <InputItem
-        label="Vị trí từng làm"
-        isRequired
-        type="text"
-        :value="item.position"
-      ></InputItem>
-      <InputItem label="Thời gian làm việc" isRequired type="date"
-        ><input class="input-time" type="date"
-      /></InputItem>
-      <TextArea label="Mô tả về công việc" :value="item.des"></TextArea>
-    </div>
-    <p class="add-button" @click="handleAdd">
-      <img :src="plusIcon" /><span>Thêm công ty</span>
-    </p>
+      <p v-show="checkExpCount">min 1</p>
+      <p class="add-button" @click="handleAdd">
+        <img :src="plusIcon" /><span>Thêm công ty</span>
+      </p>
+    </form>
   </div>
 </template>
 
@@ -39,14 +58,23 @@ export default {
       companyList: [
         {
           id: 1,
-          compName: "Mor",
-          position: "Dev Fe",
-          start: "01/01/2021",
-          end: "01/01/2022",
-          des: "mor.......",
+          company: "",
+          poisition: "",
+          start_date: "",
+          end_date: "",
+          description: "",
         },
       ],
-      expCount: 1,
+      error: {
+        REQUIRED_NOTI: "This field is not empty!",
+        INP_LENGTH: "Over 100 characters!",
+      },
+      checkStatus: {
+        isEmpty: false,
+        isOver: false,
+        isDate: false,
+      },
+      checkExpCount: false,
       trashIcon,
       plusIcon,
       company,
@@ -55,10 +83,24 @@ export default {
   components: { InputItem, TextArea, SelectCity },
   methods: {
     handleAdd() {
-      this.companyList.push({ compName: "", position: "", start: "", des: "" });
+      let uniqueKey = Math.random().toString(36).substring(2);
+      this.companyList.push({
+        id: uniqueKey,
+        company: "",
+        poisition: "",
+        start_date: "",
+        end_date: "",
+        description: "",
+      });
     },
     handleDelete(index) {
-      this.companyList.splice(index, 1);
+      const i = this.companyList.map((item) => item.id).indexOf(index);
+      if (this.companyList.length > 1) {
+        this.companyList.splice(i, 1);
+        this.checkExpCount = false;
+      } else {
+        this.checkExpCount = true;
+      }
     },
   },
 };
@@ -129,6 +171,9 @@ export default {
   width: 11px;
   border: 1px solid #bdbdbd;
   left: 135px;
+}
+#second-form .warning {
+  border: 1px solid red;
 }
 </style>
 slice
