@@ -1,6 +1,6 @@
 <template>
   <div id="second-form">
-    <form action="" v-on:submit.prevent>
+    <form action="" @change="checkButton" v-on:submit.prevent>
       <div
         class="form-group"
         v-for="item in companyList"
@@ -22,19 +22,36 @@
           type="text"
           :value="item.position"
           :valueInput.sync="item.poisition"
+          :class="{ active: checkStatus.isEmpty }"
+          @handleChangeInput="handleFocusInput(item)"
+          maxLength="100"
         ></InputItem>
+        <p class="warning" v-show="checkStatus.isEmpty">
+          {{ error.REQUIRED_NOTI }}
+        </p>
         <InputItem
           label="Thời gian làm việc"
           isRequired
           type="date"
           :valueInput.sync="item.start_date"
-          ><input class="input-time" type="date" v-model="item.end_date"
-        /></InputItem>
+          @handleChangeInput="checkDateExp(item)"
+          :class="{ active: checkStatus.isDate }"
+          classBox="input-time"
+          ><input
+            type="date"
+            v-model="item.end_date"
+            @change="checkDateExp(item)"
+          />
+        </InputItem>
         <TextArea
           label="Mô tả về công việc"
           :value="item.des"
           :valueInput.sync="item.description"
+          maxLength="1000"
         ></TextArea>
+        <p :class="{ warning: item.description.length == 1000 }">
+          {{ item.description.length }}/1000
+        </p>
       </div>
       <p v-show="checkExpCount">min 1</p>
       <p class="add-button" @click="handleAdd">
@@ -71,13 +88,13 @@ export default {
       },
       checkStatus: {
         isEmpty: false,
-        isOver: false,
         isDate: false,
       },
       checkExpCount: false,
       trashIcon,
       plusIcon,
       company,
+      isDisable: false,
     };
   },
   components: { InputItem, TextArea, SelectCity },
@@ -92,15 +109,41 @@ export default {
         end_date: "",
         description: "",
       });
+      this.$store.commit("SET_SECOND_FORM", this.companyList);
     },
     handleDelete(index) {
-      const i = this.companyList.map((item) => item.id).indexOf(index);
+      let i = this.companyList.map((item) => item.id).indexOf(index);
       if (this.companyList.length > 1) {
         this.companyList.splice(i, 1);
         this.checkExpCount = false;
       } else {
         this.checkExpCount = true;
       }
+    },
+    handleFocusInput(item) {
+      if (!item.poisition.length) {
+        this.checkStatus.isEmpty = true;
+        console.log(this.checkStatus.isEmpty);
+      } else {
+        this.checkStatus.isEmpty = false;
+      }
+    },
+    checkDateExp(item) {
+      let startDate = new Date(item.start_date);
+      let endDate = new Date(item.end_date);
+      if (startDate >= endDate) {
+        this.checkStatus.isDate = true;
+      } else {
+        this.checkStatus.isDate = false;
+      }
+    },
+    checkButton() {
+      if (this.checkStatus.isEmpty || this.checkStatus.isDate) {
+        this.isDisable = true;
+      } else {
+        this.isDisable = false;
+      }
+      this.$store.commit("SET_DISABLE", this.isDisable);
     },
   },
 };
@@ -172,8 +215,16 @@ export default {
   border: 1px solid #bdbdbd;
   left: 135px;
 }
-#second-form .warning {
-  border: 1px solid red;
+
+.warning input[type="date"] {
+  border-color: red;
+}
+p {
+  text-align: start;
+  margin-bottom: 10px;
+}
+p.warning {
+  color: red;
 }
 </style>
 slice
