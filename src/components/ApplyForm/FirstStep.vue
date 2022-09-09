@@ -1,6 +1,11 @@
 <template>
   <div id="first-layout">
-    <form id="first-form" method="get" @submit.prevent="changeForm">
+    <form
+      id="first-form"
+      method="get"
+      @change="checkButton"
+      v-on:submit.prevent
+    >
       <InputItem
         label="Họ và tên"
         name="full-name"
@@ -8,17 +13,24 @@
         isRequired
         :valueInput.sync="firstForm.fullName"
         @handleChangeInput="handleFocusInput"
+        :class="{
+          active: checkStatus.isEmpty || checkStatus.isOver,
+        }"
       ></InputItem>
-      <p v-show="checkStatus.isEmpty">{{ error.REQUIRED_NOTI }}</p>
-      <p v-show="checkStatus.isOver">{{ error.INP_LENGTH }}</p>
+      <p class="warning" v-show="checkStatus.isEmpty">
+        {{ error.REQUIRED_NOTI }}
+      </p>
+      <p class="warning" v-show="checkStatus.isOver">{{ error.INP_LENGTH }}</p>
       <InputItem
         label="Ngày sinh"
         name="date-picker"
         type="date"
         isRequired
         :valueInput.sync="firstForm.date"
-        @handleChangeInput="handleFocusInput"
+        @handleChangeInput="checkDateOfBirth"
+        :class="{ active: checkStatus.isDate }"
       ></InputItem>
+      <p class="warning" v-show="checkStatus.isDate">{{ error.DATE_OVER }}</p>
       <SelectCity
         :list="list"
         label="Thành Phố"
@@ -28,10 +40,12 @@
       <TextArea
         label="Mô tả về bản thân"
         :valueInput.sync="firstForm.description"
-        @handleChangeArea="handleFocusArea"
+        :class="{ active: firstForm.description.length > 1000 }"
+        maxLength="1000"
       ></TextArea>
-      <p>{{ firstForm.description.length }}/1000</p>
-      <p v-show="checkStatus.isOverArea">{{ error.TEXT_AREA }}</p>
+      <p :class="{ active: firstForm.description.length == 1000 }">
+        {{ firstForm.description.length }}/1000
+      </p>
       <DropZone label="Ảnh cá nhân"></DropZone>
     </form>
   </div>
@@ -56,16 +70,18 @@ export default {
   data() {
     return {
       isRequired: true,
+      isDisable: false,
       list: [],
       error: {
         REQUIRED_NOTI: "This field is not empty!",
         INP_LENGTH: "Over 100 characters!",
-        TEXT_AREA: "Over 1000 characters!",
+        DATE_OVER: "Select a date that is less than the current date!",
       },
       checkStatus: {
         isEmpty: false,
         isOver: false,
         isOverArea: false,
+        isDate: false,
       },
       firstForm: {
         fullName: "",
@@ -82,8 +98,6 @@ export default {
         this.list = res.data;
       } catch (error) {
         console.error(error);
-      } finally {
-        this.isLoading = false;
       }
     },
     handleFocusInput() {
@@ -93,13 +107,33 @@ export default {
       } else if (this.firstForm.fullName.length > 10) {
         this.checkStatus.isOver = true;
         this.checkStatus.isEmpty = false;
+      } else {
+        this.checkStatus.isEmpty = false;
+        this.checkStatus.isOver = false;
       }
     },
-    handleFocusArea() {
-      if (this.firstForm.description.length > 1000) {
-        this.checkStatus.isOverArea = true;
+    checkButton() {
+      if (
+        this.checkStatus.isOver ||
+        this.checkStatus.isEmpty ||
+        this.checkStatus.isOverArea ||
+        this.checkStatus.isDate
+      ) {
+        this.isDisable = true;
       } else {
-        this.checkStatus.isOverArea = false;
+        this.isDisable = false;
+      }
+      this.$store.commit("SET_DISABLE", this.isDisable);
+    },
+    checkDateOfBirth() {
+      const dateNow = new Date();
+      const dateSelect = new Date(this.firstForm.date);
+      console.log(dateSelect);
+      console.log(dateNow);
+      if (dateNow <= dateSelect) {
+        this.checkStatus.isDate = true;
+      } else {
+        this.checkStatus.isDate = false;
       }
     },
   },
@@ -121,6 +155,16 @@ export default {
 }
 p {
   text-align: start;
+  margin-bottom: 10px;
+}
+p.active {
+  color: red;
+}
+.active textarea {
+  border-color: red !important;
+}
+
+.warning {
+  color: red;
 }
 </style>
-span

@@ -8,6 +8,7 @@
       type="submit"
       form="first-form"
       value="Submit"
+      :disabled="isDisabled"
     >
       Tiếp
     </button>
@@ -36,6 +37,11 @@ export default {
       this.$emit("handleNext");
     },
   },
+  computed: {
+    isDisabled() {
+      return this.$store.getters.isDisable;
+    },
+  },
 };
 </script>
 
@@ -56,7 +62,9 @@ export default {
   font-size: 16px;
   margin-right: 26px;
 }
-
+button:disabled {
+  background: red;
+}
 .button-control .active {
   background: #627d98;
   color: white;
