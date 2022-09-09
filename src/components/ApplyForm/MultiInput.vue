@@ -5,16 +5,21 @@
       <img :src="searchIcon" alt="" />
       <div class="field-tags">
         <button
-          v-for="item in positionField"
+          v-for="item in poisitionField"
           :key="item.id"
           @click="handleDeleteTag(item.id)"
         >
           <p>{{ item.name }}</p>
         </button>
       </div>
-      <input type="text" :placeholder="placeHolder" v-model="searchValue" />
+      <input
+        type="text"
+        :placeholder="placeHolder"
+        :value="searchValue"
+        @input="onInputValue"
+      />
     </div>
-    <div class="tags" v-show="searchValue">
+    <div class="tags">
       <p
         v-for="item in fieldTags"
         :key="item.id"
@@ -29,38 +34,30 @@
 
 <script>
 import searchIcon from "../../assets/Image/search.png";
-import { position } from "../../data/data";
 export default {
   name: "Multi-Input",
   props: {
     placeHolder: String,
+    poisitionField: Array,
+    poisition: Array,
+    fieldTags: Array,
+    searchValue: String,
   },
   data() {
     return {
       searchIcon,
-      position,
-      searchValue: "",
-      positionField: [],
     };
   },
   methods: {
     handleAddTag(item) {
-      if (this.positionField.includes(item)) {
-        this.positionField.slice(item, 1);
-      } else {
-        this.positionField.push(item);
-      }
+      this.$emit("handleAddTag", item);
     },
     handleDeleteTag(id) {
-      const index = this.positionField.findIndex((item) => item == id);
-      this.positionField.splice(index, 1);
+      this.$emit("handleDeleteTag", id);
     },
-  },
-  computed: {
-    fieldTags() {
-      return this.position.filter((item) =>
-        item.name.toLowerCase().match(this.searchValue.toLowerCase())
-      );
+    onInputValue(e) {
+      let inputText = e.target.value;
+      this.$emit("update:valueInput", inputText);
     },
   },
 };

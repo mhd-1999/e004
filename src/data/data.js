@@ -3,7 +3,7 @@ export const step = [
     { id: 2, name: "Kinh nghiệm làm việc", class: "second-step" },
     { id: 3, name: "Xác nhận thông tin", class: "third-step" }
 ];
-export const position = [
+export const poisition = [
     { id: 1, name: "Dev Fe" },
     { id: 2, name: "Dev Be" },
     { id: 3, name: "Dev Ops" },

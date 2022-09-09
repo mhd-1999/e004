@@ -5,6 +5,7 @@
       id="area"
       :value="valueInput"
       @input="onInputValue"
+      @change="handleChangeInput"
       :maxlength="maxLength"
     ></textarea>
   </div>
@@ -22,6 +23,9 @@ export default {
   methods: {
     onInputValue(e) {
       this.$emit("update:valueInput", e.target.value);
+    },
+    handleChangeInput() {
+      this.$emit("handleChangeInput");
     },
   },
 };

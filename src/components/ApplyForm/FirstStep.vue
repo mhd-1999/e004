@@ -36,7 +36,15 @@
         label="Thành Phố"
         :selectValue.sync="firstForm.city"
       ></SelectCity>
-      <MultiInput placeHolder="Chọn các vị trí mà bạn muốn"></MultiInput>
+      <MultiInput
+        placeHolder="Chọn các vị trí mà bạn muốn"
+        :valueInput.sync="searchValue"
+        :fieldTags="fieldTags"
+        :poisition="poisition"
+        :poisitionField="firstForm.poisition"
+        @handleAddTag="handleAddTag($event)"
+        @handleDeleteTag="handleDeleteTag($event)"
+      ></MultiInput>
       <TextArea
         label="Mô tả về bản thân"
         :valueInput.sync="firstForm.description"
@@ -57,7 +65,7 @@ import MultiInput from "./MultiInput.vue";
 import TextArea from "./TextArea.vue";
 import DropZone from "./DropZone.vue";
 import axios from "axios";
-import { CITY_API } from "@/data/data";
+import { CITY_API, poisition } from "@/data/data";
 export default {
   name: "FirstForm",
   components: {
@@ -71,6 +79,9 @@ export default {
     return {
       isRequired: true,
       isDisable: false,
+      isList: false,
+      searchValue: "",
+      poisition,
       list: [],
       error: {
         REQUIRED_NOTI: "This field is not empty!",
@@ -87,6 +98,7 @@ export default {
         fullName: "",
         date: "",
         city: "",
+        poisition: [],
         description: "",
       },
     };
@@ -100,6 +112,7 @@ export default {
         console.error(error);
       }
     },
+
     handleFocusInput() {
       if (!this.firstForm.fullName) {
         this.checkStatus.isEmpty = true;
@@ -124,6 +137,7 @@ export default {
         this.isDisable = false;
       }
       this.$store.commit("SET_DISABLE", this.isDisable);
+      this.$store.commit("SET_FIRST_FORM", this.firstForm);
     },
     checkDateOfBirth() {
       const dateNow = new Date();
@@ -135,6 +149,24 @@ export default {
       } else {
         this.checkStatus.isDate = false;
       }
+    },
+    handleAddTag(item) {
+      if (this.firstForm.poisition.includes(item)) {
+        this.firstForm.poisition.slice(item, 1);
+      } else {
+        this.firstForm.poisition.push(item);
+      }
+    },
+    handleDeleteTag(id) {
+      let i = this.firstForm.poisition.findIndex((item) => item == id);
+      this.firstForm.poisition.splice(i, 1);
+    },
+  },
+  computed: {
+    fieldTags() {
+      return this.poisition.filter((item) =>
+        item.name.toLowerCase().match(this.searchValue.toLowerCase())
+      );
     },
   },
   created() {

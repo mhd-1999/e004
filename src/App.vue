@@ -14,6 +14,7 @@
 import FirstForm from "./components/ApplyForm/FirstStep.vue";
 import SecondForm from "./components/ApplyForm/SecondStep.vue";
 import ThirdForm from "./components/ApplyForm/ThirdStep.vue";
+import FinalStep from "./components/ApplyForm/FinalStep.vue";
 import { step } from "./data/data.js";
 import HeaderForm from "./components/ApplyForm/HeaderForm.vue";
 import ButtonForm from "./components/OverForm/ButtonForm.vue";
@@ -35,6 +36,9 @@ export default {
       } else if (this.component === SecondForm) {
         this.component = ThirdForm;
         this.currentStep = 3;
+      } else if (this.component === ThirdForm) {
+        this.component = FinalStep;
+        this.currentStep = 4;
       }
     },
     handleBack() {
@@ -45,6 +49,11 @@ export default {
         this.component = FirstForm;
         this.currentStep = 1;
       }
+    },
+  },
+  computed: {
+    info() {
+      return this.$store.getters.info;
     },
   },
   components: { HeaderForm, ButtonForm },

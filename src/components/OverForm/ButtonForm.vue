@@ -1,22 +1,23 @@
 <template>
   <div class="button-control">
-    <button @click="handleBack" v-show="currentStep > 1">Quay lại</button>
+    <button @click="handleBack" v-show="currentStep > 1 && currentStep < 4">
+      Quay lại
+    </button>
     <button
       @click="handleNext"
       v-show="currentStep < 3"
       :class="{ active: currentStep == 2 }"
-      type="submit"
       form="first-form"
-      value="Submit"
       :disabled="isDisabled"
     >
       Tiếp
     </button>
     <button
+      @click="handleNext"
       type="submit"
-      value="Submit"
       v-show="currentStep == 3"
       :class="{ active: currentStep == 3 }"
+      :disabled="isDisabled"
     >
       Hoàn Thành
     </button>
@@ -63,7 +64,7 @@ export default {
   margin-right: 26px;
 }
 button:disabled {
-  background: red;
+  background: red !important;
 }
 .button-control .active {
   background: #627d98;

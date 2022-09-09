@@ -9,6 +9,9 @@
         :value="valueInput"
         @input="onInputValue"
         @change="handleChangeInput"
+        :maxlength="maxLength"
+        :style="styleBox"
+        :class="classBox"
       />
       <slot></slot>
     </div>
@@ -21,10 +24,12 @@ export default {
   props: {
     label: String,
     placeholder: String,
+    classBox: String,
     type: String,
     name: String,
     valueInput: String,
-
+    maxLength: String,
+    styleBox: String,
     isRequired: {
       type: Boolean,
     },
@@ -72,10 +77,6 @@ export default {
 .input-item p {
   display: inline-block;
 }
-.input-item input:focus {
-  border: 1px solid orange;
-  transition: 0.5s all ease-in-out;
-}
 .input-item input[type="date"] {
   width: 118px;
   margin-right: 48px;
@@ -91,5 +92,13 @@ export default {
 .active input {
   border-color: red;
   color: red;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>
