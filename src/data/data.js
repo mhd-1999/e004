@@ -19,8 +19,8 @@ export const company = [
     { id: 5, name: "Mor 5" },
     { id: 6, name: "Mor 6" },
 ]
-export const listFields = [
-    { id: 1, label: "Họ và tên", type: "text", placeholder: "" },
-    { id: 2, label: "" }
-]
+// export const listFields = [
+//     { id: 1, label: "Họ và tên", type: "text", placeholder: "" },
+//     { id: 2, label: "" }
+// ]
 export const CITY_API = "https://provinces.open-api.vn/api/";

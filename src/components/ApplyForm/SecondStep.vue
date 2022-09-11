@@ -1,11 +1,11 @@
 <template>
   <div id="second-form">
-    <form action="" @change="checkButton" v-on:submit.prevent>
+    <form @change="checkButton" v-on:submit.prevent>
       <div
         class="form-group"
         v-for="item in companyList"
         :key="item.id"
-        :class="{ warning: checkExpCount }"
+        :class="{ 'warning-box': checkExpCount }"
       >
         <div class="select-box">
           <SelectCity
@@ -53,7 +53,6 @@
           {{ item.description.length }}/1000
         </p>
       </div>
-      <p v-show="checkExpCount">min 1</p>
       <p class="add-button" @click="handleAdd">
         <img :src="plusIcon" /><span>Thêm công ty</span>
       </p>
@@ -109,6 +108,7 @@ export default {
         end_date: "",
         description: "",
       });
+      this.checkExpCount = false;
       this.$store.commit("SET_SECOND_FORM", this.companyList);
     },
     handleDelete(index) {
@@ -215,7 +215,9 @@ export default {
   border: 1px solid #bdbdbd;
   left: 135px;
 }
-
+.warning-box{
+  border-color:red
+}
 .warning input[type="date"] {
   border-color: red;
 }
