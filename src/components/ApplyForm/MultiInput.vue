@@ -19,7 +19,7 @@
         @input="onInputValue"
       />
     </div>
-    <div class="tags">
+    <div class="tags" v-if="searchValue">
       <p
         v-for="item in fieldTags"
         :key="item.id"
@@ -58,6 +58,11 @@ export default {
     onInputValue(e) {
       let inputText = e.target.value;
       this.$emit("update:valueInput", inputText);
+    },
+  }, 
+  computed: {
+    isShow() {
+      return this.$store.getters.isShow;
     },
   },
 };

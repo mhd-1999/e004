@@ -5,9 +5,9 @@
       id="drop-zone-content"
       @dragenter="isActive = true"
       @mouseleave="isActive = false"
-      @drop.prevent="handleDragImage"
+      @drop.prevent="handleChangeImage"
       @dragover.prevent
-      v-show="!image"
+      v-show="!imageSrc"
       :class="{ 'active-dropzone': isActive }"
     >
       <img :src="uploadIcon" alt="" />
@@ -21,7 +21,7 @@
       />
     </div>
     <div class="img-preview" @click="handleRemoveImage">
-      <img :src="image" />
+      <img :src="imageSrc" />
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@ export default {
   name: "DropZone",
   props: {
     label: String,
+    imageSrc:String,
   },
   data() {
     return {
@@ -41,18 +42,11 @@ export default {
     };
   },
   methods: {
-    handleDragImage(e) {
-      let files = e.dataTransfer.files;
-      this.image = URL.createObjectURL(files[0]);
-      console.log(this.image);
-    },
     handleChangeImage(e) {
-      let file = e.target.files[0];
-      this.image = URL.createObjectURL(file);
-      console.log(this.image);
+      this.$emit("handleChangeImage",e);
     },
     handleRemoveImage() {
-      this.image = "";
+      this.$emit("handleRemoveImage");
     },
   },
 };

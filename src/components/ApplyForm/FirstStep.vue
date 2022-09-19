@@ -42,6 +42,7 @@
         :fieldTags="fieldTags"
         :poisition="poisition"
         :poisitionField="firstForm.poisition"
+        :searchValue="searchValue"
         @handleAddTag="handleAddTag($event)"
         @handleDeleteTag="handleDeleteTag($event)"
       ></MultiInput>
@@ -54,7 +55,12 @@
       <p :class="{ active: firstForm.description.length == 1000 }">
         {{ firstForm.description.length }}/1000
       </p>
-      <DropZone label="Ảnh cá nhân"></DropZone>
+      <DropZone 
+        label="Ảnh cá nhân"
+       :imageSrc="imageSrc" 
+       @handleChangeImage="handleChangeImage" 
+       @handleRemoveImage="handleRemoveImage"
+      ></DropZone>
     </form>
   </div>
 </template>
@@ -79,10 +85,11 @@ export default {
     return {
       isRequired: true,
       isDisable: false,
-      isList: false,
+      isShow: false,
       searchValue: "",
       poisition,
       list: [],
+      imageSrc:"",
       error: {
         REQUIRED_NOTI: "This field is not empty!",
         INP_LENGTH: "Over 100 characters!",
@@ -100,6 +107,7 @@ export default {
         city: "",
         poisition: [],
         description: "",
+        image:"",
       },
     };
   },
@@ -124,6 +132,15 @@ export default {
         this.checkStatus.isEmpty = false;
         this.checkStatus.isOver = false;
       }
+    },
+    handleChangeImage(e){
+      let file = e.target.files[0] || e.dataTransfer.files;
+      this.firstForm.image = URL.createObjectURL(file);
+      this.imageSrc=URL.createObjectURL(file);
+      console.log(file);
+    },
+    handleRemoveImage(){
+      this.imageSrc=""
     },
     checkButton() {
       if (

@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
                 city: "",
                 poisition: [],
                 description: "",
+                image: ""
             },
             companyList: [
                 {
